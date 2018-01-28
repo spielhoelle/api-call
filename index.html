@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Github Api Fun</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="assets/stylesheets/bootstrap.min.css">
+
+  </head>
+
+  <body>
+
+
+    <main role="main">
+
+    <div class="container">
+      <header class="header my-5 clearfix">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+          <a class="navbar-brand" href="#">Github Search</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <form id="github-form" class="form-inline ml-auto">
+              <div class="form-group">
+                <div class="">
+                 <input class="form-control w-100" type="text" value="octocat" placeholder="username" id="username">
+                </div>
+              </div>
+              <button type="submit" id="button-info" class="btn btn-primary">User Info</button>
+            </form>
+            <button id="button-repo" class="btn btn-primary">Repo List</button>
+          </div>
+
+        </nav>
+      </header>
+
+      <main role="main">
+
+      <div class="jumbotron">
+
+        <h3>User-Info:</h3>
+
+        <div id="user-info">
+          <img src="http://via.placeholder.com/350x350" id="avatar"/>
+        </div>
+        <ul class="list-unstyled list-group" >
+          <li class="list-group-item">Website: <a target="_blank" href="" id="website"></a></li>
+          <li class="list-group-item">Member since: <span id="created_at"></span></li>
+        </ul>
+
+        <hr class="my-5">
+        <h3>Repos:</h3>
+        <ul class="list-unstyled" id="repo-list"></ul>
+      </div>
+
+
+      </main>
+
+
+    </div> <!-- /container -->
+
+
+    </main>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script src="assets/javascript/popper.min.js"></script>
+    <script src="assets/javascript/bootstrap.min.js"></script>
+
+    <script src="assets/javascript/index.js"></script>
+  </body>
+</html>
