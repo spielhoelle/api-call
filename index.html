@@ -22,21 +22,21 @@
       <header class="header my-5 clearfix">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
           <a class="navbar-brand" href="#">Github Search</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <form id="github-form" class="form-inline ml-auto">
-              <div class="form-group">
-                <div class="">
-                 <input class="form-control w-100" type="text" value="octocat" placeholder="username" id="username" autofocus="">
+          <form id="Github-form">
+                <div class="form-row">
+                  <div class="col-4">
+                    <input type="text" value="octocat" class="form-control" placeholder="User "  autofocus="" id="username">
+                  </div>
+                  <div class="col-4">
+                    <button  type="submit" id="button-info "  class="form-control btn btn-primary">User info </button>
+                  </div>
+                  <div class="col-4">
+                    <button  type="submit" id="button-info " class="form-control btn btn-primary">Repo List </button>
+                  </div>
+                  
                 </div>
-              </div>
-              <button type="submit" id="button-info" class="btn btn-primary">User Info</button>
-            </form>
-            <button id="button-repo" class="btn btn-primary">Repo List</button>
-          </div>
+        </form>
+         
 
         </nav>
       </header>
