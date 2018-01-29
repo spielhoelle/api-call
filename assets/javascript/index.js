@@ -60,10 +60,15 @@ class ViewLayer {
       'image': document.getElementById('avatar'),
       'website': document.getElementById('website'),
       'created_at': document.getElementById('created_at'),
+      'clearButton' : document.getElementById('clearHistory'),
     }
     this.repoEventListener()
     this.profileInfoEventListener()
+<<<<<<< HEAD
     this.onLoadListener()
+=======
+    this.clearHistory()
+>>>>>>> develop
   }
   showRepoList(data){
     console.log("repo list got updated")
@@ -120,6 +125,15 @@ class ViewLayer {
       }
     });
   }
+
+  //clearStorage
+
+  clearHistory() {
+    this.elements.clearButton.addEventListener("click",  (e) => {
+      localStorage.setItem("reposlist", JSON.stringify([]));
+      instance_of_view.elements["repo_list"].innerHTML = ""; })
+  }
+
   render(data){
     console.log("userprofile got updated")
     instance_of_view.elements.image.src = data.avatar_url
