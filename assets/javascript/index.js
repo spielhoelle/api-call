@@ -39,7 +39,7 @@ class ApiCall {
         })
     }
   }
-  getSavedInfo(){
+  getSavedUsers(){
     if (localStorage.getItem('users') !== null) {
       // pass local storage to showSavedUsers in order to display them
       instance_of_view.showSavedUsers(JSON.parse(localStorage.getItem('users')));
@@ -88,7 +88,7 @@ class ViewLayer {
   // listens to pageload event
   onLoadListener(){
     var InstanceOfAPiCall = new ApiCall();
-    window.addEventListener("load", () => InstanceOfAPiCall.getSavedInfo());
+    window.addEventListener("load", () => InstanceOfAPiCall.getSavedUsers());
   }
   repoEventListener(){
     var InstanceOfAPiCall = new ApiCall();
