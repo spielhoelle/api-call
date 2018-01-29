@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 class ApiCall {
   constructor () {
     this.baseUrl = 'https://api.github.com/users'
@@ -37,6 +39,15 @@ class ApiCall {
         })
     }
   }
+  getSavedUsers(){
+    if (localStorage.getItem('users') !== null) {
+      // pass local storage to showSavedUsers in order to display them
+      instance_of_view.showSavedUsers(JSON.parse(localStorage.getItem('users')));
+    } else {
+      // throw error if no local storage was found
+      console.log("no storage found");
+    }
+  }
 }
 class ViewLayer {
   constructor() {
@@ -49,9 +60,12 @@ class ViewLayer {
       'image': document.getElementById('avatar'),
       'website': document.getElementById('website'),
       'created_at': document.getElementById('created_at'),
+      'clearButton' : document.getElementById('clearHistory'),
     }
     this.repoEventListener()
     this.profileInfoEventListener()
+    this.onLoadListener()
+    this.clearHistory()
   }
   showRepoList(data){
     console.log("repo list got updated")
@@ -61,6 +75,23 @@ class ViewLayer {
       element.innerHTML = entry.name
       document.getElementById('repo-list').appendChild(element)
     });
+  }
+  // method to display saved github-userlist in browser
+  showSavedUsers(userList = []){
+    const list = document.querySelector(".saved_users");
+    list.style.listStyle = "none";
+    userList.forEach((user) => {
+      const li = document.createElement("li");
+      li.classList = "badge badge-pill badge-primary m-1 px-2 py-1";
+      li.innerHTML = user.login;
+      list.appendChild(li);
+    })
+
+  }
+  // listens to pageload event
+  onLoadListener(){
+    var InstanceOfAPiCall = new ApiCall();
+    window.addEventListener("load", () => InstanceOfAPiCall.getSavedUsers());
   }
   repoEventListener(){
     var InstanceOfAPiCall = new ApiCall();
@@ -91,6 +122,15 @@ class ViewLayer {
       }
     });
   }
+
+  //clearStorage
+
+  clearHistory() {
+    this.elements.clearButton.addEventListener("click",  (e) => {
+      localStorage.setItem("reposlist", JSON.stringify([]));
+      instance_of_view.elements["repo_list"].innerHTML = ""; })
+  }
+
   render(data){
     console.log("userprofile got updated")
     instance_of_view.elements.image.src = data.avatar_url
