@@ -83,6 +83,7 @@ class ViewLayer {
     })
 
   }
+  // listens to pageload event
   onLoadListener(){
     var InstanceOfAPiCall = new ApiCall();
     window.addEventListener("load", () => InstanceOfAPiCall.getSavedInfo());
