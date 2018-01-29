@@ -75,7 +75,7 @@ class ViewLayer {
     });
   }
   // method to display saved github-userlist in browser
-  showSavedUsers(userList){
+  showSavedUsers(userList = []){
     const list = document.querySelector(".saved_users");
     list.style.listStyle = "none";
     userList.forEach((user) => {
