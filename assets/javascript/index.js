@@ -27,9 +27,11 @@ class ApiCall {
       return user.login == username;
     });
     if (users.length) {
-      return users[0];
+    return new Promise(function(resolve, reject) {
+      resolve(users[0]);
+    })
     } else{
-      fetch(`${this.baseUrl}/${username}`)
+      return fetch(`${this.baseUrl}/${username}`)
         .then(resp => resp.json())
         .then((data) => {
           var users = JSON.parse(localStorage.getItem('users')) || []
@@ -116,8 +118,12 @@ class ViewLayer {
       //validation for the input value
       var letterNumber = /^[0-9a-zA-Z]+$/;
       if (letterNumber.test(username.value)){
-        show(InstanceOfAPiCall.getProfileInfo(username.value))
-      } else {
+        InstanceOfAPiCall.getProfileInfo(username.value)
+          .then((data) => {
+            show(data)
+          })
+      }
+      else {
         username.classList.add("is-invalid");
       }
     });
