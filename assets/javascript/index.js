@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 class ApiCall {
   constructor () {
     this.baseUrl = 'https://api.github.com/users'
