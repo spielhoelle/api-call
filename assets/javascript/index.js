@@ -80,6 +80,7 @@ class ViewLayer {
     list.style.listStyle = "none";
     userList.forEach((user) => {
       const li = document.createElement("li");
+      li.classList = "badge badge-pill badge-primary m-1 px-2 py-1";
       li.innerHTML = user.login;
       list.appendChild(li);
     })
