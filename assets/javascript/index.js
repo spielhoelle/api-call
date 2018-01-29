@@ -64,11 +64,8 @@ class ViewLayer {
     }
     this.repoEventListener()
     this.profileInfoEventListener()
-<<<<<<< HEAD
     this.onLoadListener()
-=======
     this.clearHistory()
->>>>>>> develop
   }
   showRepoList(data){
     console.log("repo list got updated")
