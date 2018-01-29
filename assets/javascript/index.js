@@ -74,8 +74,10 @@ class ViewLayer {
       document.getElementById('repo-list').appendChild(element)
     });
   }
+  // method to display saved github-userlist in browser
   showSavedUsers(userList){
     const list = document.querySelector(".saved_users");
+    list.style.listStyle = "none";
     userList.forEach((user) => {
       const li = document.createElement("li");
       li.innerHTML = user.login;
