@@ -108,7 +108,13 @@ class ViewLayer {
     const username = this.elements.username
     this.elements.info.addEventListener("click", function(e){
       e.preventDefault();
-      show(InstanceOfAPiCall.getProfileInfo(username.value))
+      //validation for the input value
+      var letterNumber = /^[0-9a-zA-Z]+$/;
+      if (letterNumber.test(username.value)){
+        show(InstanceOfAPiCall.getProfileInfo(username.value))
+      } else {
+        username.classList.add("is-invalid");
+      }
     });
   }
   render(data){
