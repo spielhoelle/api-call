@@ -21,6 +21,7 @@ class ApiCall {
     })
   }
   getProfileInfo(username){
+    this.getSavedInfo();
     console.log("requested user info for:" + username)
     const database = JSON.parse(localStorage.getItem('users')) || [];
     const users = database.filter(function (user) {
@@ -37,6 +38,13 @@ class ApiCall {
           localStorage.setItem('users', JSON.stringify( users ));
           return data;
         })
+    }
+  }
+  getSavedInfo(){
+    if (localStorage.getItem('users') !== null) {
+      instance_of_view.showSavedUsers(JSON.parse(localStorage.getItem('users')));
+    } else {
+      console.log("no storage found");
     }
   }
 }
@@ -63,6 +71,9 @@ class ViewLayer {
       element.innerHTML = entry.name
       document.getElementById('repo-list').appendChild(element)
     });
+  }
+  showSavedUsers(userList){
+    console.log(userList);
   }
   repoEventListener(){
     var InstanceOfAPiCall = new ApiCall();
