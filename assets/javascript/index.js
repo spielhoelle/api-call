@@ -21,7 +21,6 @@ class ApiCall {
     })
   }
   getProfileInfo(username){
-    this.getSavedInfo();
     console.log("requested user info for:" + username)
     const database = JSON.parse(localStorage.getItem('users')) || [];
     const users = database.filter(function (user) {
@@ -42,8 +41,10 @@ class ApiCall {
   }
   getSavedInfo(){
     if (localStorage.getItem('users') !== null) {
+      // pass local storage to showSavedUsers in order to display them
       instance_of_view.showSavedUsers(JSON.parse(localStorage.getItem('users')));
     } else {
+      // throw error if no local storage was found
       console.log("no storage found");
     }
   }
@@ -62,6 +63,7 @@ class ViewLayer {
     }
     this.repoEventListener()
     this.profileInfoEventListener()
+    this.onLoadListener()
   }
   showRepoList(data){
     console.log("repo list got updated")
@@ -73,7 +75,17 @@ class ViewLayer {
     });
   }
   showSavedUsers(userList){
-    console.log(userList);
+    const list = document.querySelector(".saved_users");
+    userList.forEach((user) => {
+      const li = document.createElement("li");
+      li.innerHTML = user.login;
+      list.appendChild(li);
+    })
+
+  }
+  onLoadListener(){
+    var InstanceOfAPiCall = new ApiCall();
+    window.addEventListener("load", () => InstanceOfAPiCall.getSavedInfo());
   }
   repoEventListener(){
     var InstanceOfAPiCall = new ApiCall();
