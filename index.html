@@ -48,15 +48,17 @@
       </div>
       <div class="jumbotron">
 
-        <h3>User-Info:</h3>
-
-        <div id="user-info" class="mx-auto" style="width: 200px">
-          <img src="http://via.placeholder.com/200x200" id="avatar"/>
+      <div class="flex-sm-nowrap flex-wrap media">
+        <img id="avatar" class="mr-3" src="http://via.placeholder.com/200x200" alt="Generic placeholder image">
+        <div class="media-body">
+          <h3>User-Info:</h3>
+             
+          <ul class="list-unstyled list-group" >
+                <li class="list-group-item">Website: <a target="_blank" href="" id="website"></a></li>
+                <li class="list-group-item">Member since: <span id="created_at"></span></li>
+          </ul>
         </div>
-        <ul class="list-unstyled list-group" >
-          <li class="list-group-item">Website: <a target="_blank" href="" id="website"></a></li>
-          <li class="list-group-item">Member since: <span id="created_at"></span></li>
-        </ul>
+      </div>
         <button id="clearHistory" type="button" class="btn btn-danger float-right">Clear History</button>
         <hr class="my-5">
         <h3>Repos:</h3>
