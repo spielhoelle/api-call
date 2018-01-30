@@ -13,9 +13,16 @@ class ApiCall {
       .then(resp => resp.json())
       .then((data) => {
         if (debug) console.log("repo list:", data);
-        localStorage.setItem('reposlist', JSON.stringify(data));
+        this.saveRepoList(data);
         return data;
       })
+  }
+
+  // save repos in array of arrays in local storage
+  saveRepoList(repos){
+    const database = JSON.parse(localStorage.getItem('reposlist')) || [];
+      database.push(repos);
+      localStorage.setItem('reposlist', JSON.stringify(database));
   }
 
   getProfileInfo(username){
@@ -69,6 +76,7 @@ class ViewLayer {
     this.profileInfoEventListener()
     this.onLoadListener()
     this.clearHistory()
+    this.savedUsersListener()
     if(debug){console.log("View instancenated") }
   }
 
@@ -95,6 +103,24 @@ class ViewLayer {
     })
 
   }
+  // listens to clicks on saved username list
+  savedUsersListener(){
+    const usersDatabase = JSON.parse(localStorage.getItem('users')) || [];
+    const reposDatabase = JSON.parse(localStorage.getItem('reposlist')) || [];
+    const list = document.querySelector(".saved_users");
+    list.addEventListener('click', (e) =>{
+      const username = e.target.innerHTML;
+      let userIndex;
+      // finding the correct index of the repos
+      usersDatabase.forEach((item, index) => {
+        if (username === item.login) userIndex = index;
+      })
+      if (userIndex !== undefined) {
+        this.showRepoList(reposDatabase[userIndex])
+      }
+    })
+  }
+
   // listens to pageload event
   onLoadListener(){
     var InstanceOfAPiCall = new ApiCall();
