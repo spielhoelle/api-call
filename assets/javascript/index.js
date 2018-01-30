@@ -8,17 +8,37 @@ class ApiCall {
   getRepoList(username){
     console.log("requested repo list for: " + username)
     var url = this.baseUrl
+    var username = username
     return new Promise(function(resolve, reject) {
-      $.getJSON(`${url}/${username}/repos`)
-        .done((data) => {
-          resolve(data);
-          localStorage.setItem('reposlist', JSON.stringify(data));
-          console.log("repo list:", data)
+      const database = JSON.parse(localStorage.getItem('reposlist')) || [];
+      const repos = database[0].filter(function (repo) {
+        return repo.full_name.indexOf(username) !== -1;
+      });
+      console.log(repos)
+      if (repos.length) {
+        return new Promise(function(resolve, reject) {
+          resolve(repos);
+          console.log("REPO found in database: ",repos)
         })
-        .fail( () => {
-          alert("Username not found");
-        })
+      } else{
+        console.log("REPO NOT found in database, get from API")
+
+        $.getJSON(`${url}/${username}/repos`)
+          .done((data) => {
+            var repos = JSON.parse(localStorage.getItem('repos')) || []
+            repos.push(data);
+            console.log("REPO fetched from API, return it")
+            localStorage.setItem('reposlist', JSON.stringify(repos));
+            console.log("repo list:", repos)
+            resolve(data);
+          })
+          .fail( () => {
+            alert("Repo not found");
+          })
+
+      }
     })
+
   }
   getProfileInfo(username){
     console.log("requested user info for:" + username)
@@ -27,13 +47,15 @@ class ApiCall {
       return user.login == username;
     });
     if (users.length) {
-    return new Promise(function(resolve, reject) {
-      resolve(users[0]);
-    })
+      console.log("user found in the database, returning it", users[0])
+      return new Promise(function(resolve, reject) {
+        resolve(users[0]);
+      })
     } else{
       return fetch(`${this.baseUrl}/${username}`)
         .then(resp => resp.json())
         .then((data) => {
+          console.log("user fetched from API, returning it", data)
           var users = JSON.parse(localStorage.getItem('users')) || []
           users.push(data);
           localStorage.setItem('users', JSON.stringify( users ));
@@ -101,6 +123,7 @@ class ViewLayer {
     var username = this.elements.username
 
     this.elements.repo.addEventListener("click", function(e){
+      console.log("repo button clicked")
       e.preventDefault();
       InstanceOfAPiCall.getRepoList(username.value)
         .then(function(v) { // `delay` returns a promise
@@ -114,16 +137,19 @@ class ViewLayer {
     var show = this.render
     const username = this.elements.username
     this.elements.info.addEventListener("click", function(e){
+      console.log("user button clicked")
       e.preventDefault();
       //validation for the input value
       var letterNumber = /^[0-9a-zA-Z]+$/;
       if (letterNumber.test(username.value)){
+        console.log("username valid, carry on")
         InstanceOfAPiCall.getProfileInfo(username.value)
           .then((data) => {
             show(data)
           })
       }
       else {
+        console.log("username invalid - stop")
         username.classList.add("is-invalid");
       }
     });
