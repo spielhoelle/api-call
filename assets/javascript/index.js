@@ -108,7 +108,7 @@ class ViewLayer {
       if (debug) console.log("Repo button clicked");
       e.preventDefault();
       InstanceOfAPiCall.getRepoList(username.value)
-        .then((v) => updateView(v)); // `delay` returns a promise
+        .then((v) => this.showRepoList(v)); // `delay` returns a promise
     });
   }
   profileInfoEventListener(){
