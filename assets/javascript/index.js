@@ -6,20 +6,18 @@ class ApiCall {
     this.baseUrl = 'https://api.github.com/users'
     this.username = ""
   }
+
+  // takes a username and fetches repolist from github
   getRepoList(username){
-    var url = this.baseUrl
-    return new Promise(function(resolve, reject) {
-      $.getJSON(`${url}/${username}/repos`)
-        .done((data) => {
-          resolve(data);
-          localStorage.setItem('reposlist', JSON.stringify(data));
-          if(debug){console.log("repo list:", data) }
-        })
-        .fail( () => {
-          alert("Username not found");
-        })
-    })
+    return fetch(`${this.baseUrl}/${username}/repos`)
+      .then(resp => resp.json())
+      .then((data) => {
+        if (debug) console.log("repo list:", data);
+        localStorage.setItem('reposlist', JSON.stringify(data));
+        return data;
+      })
   }
+
   getProfileInfo(username){
     if(debug){console.log("requested user info for:", username) }
     const database = JSON.parse(localStorage.getItem('users')) || [];
@@ -73,13 +71,15 @@ class ViewLayer {
     this.clearHistory()
     if(debug){console.log("View instancenated") }
   }
-  showRepoList(data){
+
+  // takes an array of repos and displays the repos in browser
+  showRepoList(data = []){
     if(debug){console.log("repo list got updated")}
-    data.forEach(function(entry) {
-      var element = document.createElement('li');
-      element.classList.add('list-group-item')
-      element.innerHTML = entry.name
-      document.getElementById('repo-list').appendChild(element)
+    data.forEach((entry) => {
+      const element = document.createElement('li');
+      element.classList.add('list-group-item');
+      element.innerHTML = entry.name;
+      document.getElementById('repo-list').appendChild(element);
     });
   }
   // method to display saved github-userlist in browser
@@ -100,37 +100,36 @@ class ViewLayer {
     var InstanceOfAPiCall = new ApiCall();
     window.addEventListener("load", () => InstanceOfAPiCall.getSavedUsers());
   }
-  repoEventListener(){
-    var InstanceOfAPiCall = new ApiCall();
-    var updateView = this.showRepoList
-    var username = this.elements.username
 
-    this.elements.repo.addEventListener("click", function(e){
-      if(debug){console.log("Repo button clicked") }
+  // handles clicks on button "Repo List"
+  repoEventListener(){
+    const InstanceOfAPiCall = new ApiCall();
+    this.elements.repo.addEventListener("click", (e) => {
+      if (debug) console.log("Repo button clicked");
       e.preventDefault();
       InstanceOfAPiCall.getRepoList(username.value)
-        .then(function(v) { // `delay` returns a promise
-          updateView(v)
-        });
+        .then((v) => this.showRepoList(v)); // `delay` returns a promise
     });
   }
-  profileInfoEventListener(){
-    var InstanceOfAPiCall = new ApiCall();
 
-    var show = this.render
+  // handles clicks on button "User Info"
+  profileInfoEventListener(){
+    const InstanceOfAPiCall = new ApiCall();
     const username = this.elements.username
-    this.elements.info.addEventListener("click", function(e){
-      if(debug){console.log("User button clicked") }
+    this.elements.info.addEventListener("click", (e) => {
+      if (debug) console.log("User button clicked");
       e.preventDefault();
       //validation for the input value
-      var letterNumber = /^[0-9a-zA-Z]+$/;
+      const letterNumber = /^[0-9a-zA-Z]+$/;
+      // valid input gets profile info from github
       if (letterNumber.test(username.value)){
         InstanceOfAPiCall.getProfileInfo(username.value)
           .then((data) => {
-            if(debug){console.log("Input is valid, returning: ") }
-            show(data)
+            if (debug) console.log("Input is valid, returning: ");
+            this.render(data)
           })
       }
+      // invalid input add red border
       else {
         if(debug){console.log("Input is not valid") }
         username.classList.add("is-invalid");
