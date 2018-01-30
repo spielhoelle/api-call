@@ -83,6 +83,7 @@ class ViewLayer {
 
   // takes an array of repos and displays the repos in browser
   showRepoList(data = []){
+    this.elements.repo_list.innerHTML = "";
     if(debug){console.log("repo list got updated")}
     data.forEach((entry) => {
       const element = document.createElement('li');
