@@ -3,23 +3,28 @@ const debug = true
 
 class ApiCall {
   constructor () {
-    this.baseUrl = 'https://api.github.com/users'
+    this.baseUrl = 'https://api.github.com'
     this.username = ""
   }
 
   // takes a username and fetches repolist from github
   getRepoList(username){
-    return fetch(`${this.baseUrl}/${username}/repos`)
-      .then(resp => resp.json())
-      .then((data) => {
-        if (debug) console.log("repo list:", data);
-        localStorage.setItem('reposlist', JSON.stringify(data));
-        return data;
-      })
+    var url = this.baseUrl
+    return new Promise(function(resolve, reject) {
+      $.getJSON(`${url}/${username}/repos`)
+        .done((data) => {
+          resolve(data);
+          localStorage.setItem('reposlist', JSON.stringify(data));
+          if(debug){console.log("repo list:", data) }
+        })
+        .fail( () => {
+          alert("Username not found");
+        })
+    })
   }
 
   getProfileInfo(username){
-    if(debug){console.log("requested user info for:", username) }
+    console.log("requested user info for:" + username)
     const database = JSON.parse(localStorage.getItem('users')) || [];
     const users = database.filter(function (user) {
       return user.login == username;
@@ -30,7 +35,7 @@ class ApiCall {
       resolve(users[0]);
     })
     } else{
-      return fetch(`${this.baseUrl}/${username}`)
+      fetch(`${this.baseUrl}/${username}`)
         .then(resp => resp.json())
         .then((data) => {
           var users = JSON.parse(localStorage.getItem('users')) || []
@@ -41,6 +46,15 @@ class ApiCall {
         })
     }
   }
+  
+  getOrgInfo(orgname) {
+    return fetch(`${this.baseUrl}/orgs/${orgname}/members`)
+      .then(resp => resp.json())
+      .then((data) => {
+        return data
+      })
+  }
+
   getSavedUsers(){
     if (localStorage.getItem('users') !== null) {
       // pass local storage to showSavedUsers in order to display them
@@ -64,24 +78,23 @@ class ViewLayer {
       'website': document.getElementById('website'),
       'created_at': document.getElementById('created_at'),
       'clearButton' : document.getElementById('clearHistory'),
-      'loader': document.getElementById('loader'),
-      'closeAlertButton':document.getElementById ("X-button"),
     }
     this.repoEventListener()
     this.profileInfoEventListener()
     this.onLoadListener()
     this.clearHistory()
+    this.orgEventlistener()
     if(debug){console.log("View instancenated") }
   }
 
   // takes an array of repos and displays the repos in browser
   showRepoList(data = []){
     if(debug){console.log("repo list got updated")}
-    data.forEach((entry) => {
-      const element = document.createElement('li');
-      element.classList.add('list-group-item');
-      element.innerHTML = entry.name;
-      document.getElementById('repo-list').appendChild(element);
+    data.forEach(function(entry) {
+      var element = document.createElement('li');
+      element.classList.add('list-group-item')
+      element.innerHTML = entry.name
+      document.getElementById('repo-list').appendChild(element)
     });
   }
   // method to display saved github-userlist in browser
@@ -102,8 +115,6 @@ class ViewLayer {
     var InstanceOfAPiCall = new ApiCall();
     window.addEventListener("load", () => InstanceOfAPiCall.getSavedUsers());
   }
-
-  // handles clicks on button "Repo List"
   repoEventListener(){
     const InstanceOfAPiCall = new ApiCall();
     this.elements.repo.addEventListener("click", (e) => {
@@ -113,10 +124,10 @@ class ViewLayer {
         .then((v) => this.showRepoList(v)); // `delay` returns a promise
     });
   }
-
-  // handles clicks on button "User Info"
   profileInfoEventListener(){
-    const InstanceOfAPiCall = new ApiCall();
+    var InstanceOfAPiCall = new ApiCall();
+
+    var show = this.render
     const username = this.elements.username
     const loader = this.elements.loader
     this.elements.info.addEventListener("click", (e) => {
@@ -142,7 +153,6 @@ class ViewLayer {
   }
 
   //clearStorage
-
   clearHistory() {
     this.elements.clearButton.addEventListener("click",  (e) => {
       localStorage.setItem("reposlist", JSON.stringify([]));
@@ -157,5 +167,7 @@ class ViewLayer {
     instance_of_view.elements.created_at.innerHTML = data.created_at
     instance_of_view.elements.loader.style.opacity = 0
   }
+  
 }
 const instance_of_view = new ViewLayer();
+const haha = new ApiCall();
