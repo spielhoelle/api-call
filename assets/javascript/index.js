@@ -21,8 +21,17 @@ class ApiCall {
   // save repos in array of arrays in local storage
   saveRepoList(repos){
     const database = JSON.parse(localStorage.getItem('reposlist')) || [];
-    database.push(repos);
-    localStorage.setItem('reposlist', JSON.stringify(database));
+    let found;
+    for (let i = 0; i < database.length; i++) {
+      database[i].forEach((item) => {
+        found = item.owner.login === repos[0].owner.login;
+      })
+      if (found) break;
+    }
+    if (!found) {
+      database.push(repos);
+      localStorage.setItem('reposlist', JSON.stringify(database));
+    }
   }
 
   getProfileInfo(username){
