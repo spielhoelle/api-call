@@ -71,6 +71,7 @@ class ViewLayer {
       'website': document.getElementById('website'),
       'created_at': document.getElementById('created_at'),
       'clearButton' : document.getElementById('clearHistory'),
+      'loader': document.getElementById('loader')
     }
     this.repoEventListener()
     this.profileInfoEventListener()
@@ -142,8 +143,10 @@ class ViewLayer {
   profileInfoEventListener(){
     const InstanceOfAPiCall = new ApiCall();
     const username = this.elements.username
+    const loader = this.elements.loader
     this.elements.info.addEventListener("click", (e) => {
-      if (debug) console.log("User button clicked");
+      loader.style.opacity = 1
+      if (debug) {console.log("User button clicked")};
       e.preventDefault();
       //validation for the input value
       const letterNumber = /^[0-9a-zA-Z]+$/;
@@ -177,6 +180,7 @@ class ViewLayer {
     instance_of_view.elements.website.href = data.blog
     instance_of_view.elements.website.innerHTML = data.blog
     instance_of_view.elements.created_at.innerHTML = data.created_at
+    instance_of_view.elements.loader.style.opacity = 0
   }
 }
 const instance_of_view = new ViewLayer();
