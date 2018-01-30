@@ -111,23 +111,25 @@ class ViewLayer {
         .then((v) => this.showRepoList(v)); // `delay` returns a promise
     });
   }
-  profileInfoEventListener(){
-    var InstanceOfAPiCall = new ApiCall();
 
-    var show = this.render
+  // handles clicks on button "User Info"
+  profileInfoEventListener(){
+    const InstanceOfAPiCall = new ApiCall();
     const username = this.elements.username
-    this.elements.info.addEventListener("click", function(e){
-      if(debug){console.log("User button clicked") }
+    this.elements.info.addEventListener("click", (e) => {
+      if (debug) console.log("User button clicked");
       e.preventDefault();
       //validation for the input value
-      var letterNumber = /^[0-9a-zA-Z]+$/;
+      const letterNumber = /^[0-9a-zA-Z]+$/;
+      // valid input gets profile info from github
       if (letterNumber.test(username.value)){
         InstanceOfAPiCall.getProfileInfo(username.value)
           .then((data) => {
-            if(debug){console.log("Input is valid, returning: ") }
-            show(data)
+            if (debug) console.log("Input is valid, returning: ");
+            this.render(data)
           })
       }
+      // invalid input add red border
       else {
         if(debug){console.log("Input is not valid") }
         username.classList.add("is-invalid");
