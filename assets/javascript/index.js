@@ -64,7 +64,8 @@ class ViewLayer {
       'website': document.getElementById('website'),
       'created_at': document.getElementById('created_at'),
       'clearButton' : document.getElementById('clearHistory'),
-      'loader': document.getElementById('loader')
+      'loader': document.getElementById('loader'),
+      'closeAlertButton':document.getElementById ("X-button"),
     }
     this.repoEventListener()
     this.profileInfoEventListener()
