@@ -100,18 +100,15 @@ class ViewLayer {
     var InstanceOfAPiCall = new ApiCall();
     window.addEventListener("load", () => InstanceOfAPiCall.getSavedUsers());
   }
-  repoEventListener(){
-    var InstanceOfAPiCall = new ApiCall();
-    var updateView = this.showRepoList
-    var username = this.elements.username
 
-    this.elements.repo.addEventListener("click", function(e){
-      if(debug){console.log("Repo button clicked") }
+  // handles clicks on button "Repo List"
+  repoEventListener(){
+    const InstanceOfAPiCall = new ApiCall();
+    this.elements.repo.addEventListener("click", (e) => {
+      if (debug) console.log("Repo button clicked");
       e.preventDefault();
       InstanceOfAPiCall.getRepoList(username.value)
-        .then(function(v) { // `delay` returns a promise
-          updateView(v)
-        });
+        .then((v) => this.showRepoList(v)); // `delay` returns a promise
     });
   }
   profileInfoEventListener(){
