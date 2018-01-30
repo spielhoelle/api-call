@@ -80,7 +80,8 @@ class ViewLayer {
       'website': document.getElementById('website'),
       'created_at': document.getElementById('created_at'),
       'clearButton' : document.getElementById('clearHistory'),
-      'loader': document.getElementById('loader')
+      'loader': document.getElementById('loader'),
+      'closeAlertButton':document.getElementById ("X-button"),
     }
     this.repoEventListener()
     this.profileInfoEventListener()
@@ -180,10 +181,15 @@ class ViewLayer {
 
   clearHistory() {
     this.elements.clearButton.addEventListener("click",  (e) => {
-      localStorage.setItem("reposlist", JSON.stringify([]));
-      instance_of_view.elements["repo_list"].innerHTML = ""; })
-  }
+    let clearCashe = confirm("are you sure want to clear the cache");
+    if ( clearCashe === true) {
+     localStorage.setItem('reposlist', JSON.stringify([]));
+      instance_of_view.elements["repo_list"].innerHTML = "";
+       }
+    });  
+ }
 
+ 
   render(data){
     if(debug){console.log("userprofile got updated")}
     instance_of_view.elements.image.src = data.avatar_url
