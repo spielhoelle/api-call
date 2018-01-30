@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-100">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,13 +10,16 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/stylesheets/style.css">
+    <link rel="stylesheet" href="assets/stylesheets/font-awesome.min.css">
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
 
   </head>
 
-  <body>
+  <body class="h-100">
 
 
-    <main role="main">
+    <main role="main" class="bg-info" class="h-100">
 
     <div class="container">
       <header class="header my-5 clearfix">
@@ -42,19 +45,31 @@
         </nav>
       </header>
 
-      <main role="main">
 
+      <div id="alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+        <strong>Username not found!</strong> Try with somebody else.
+        <button class="btn btn-link text-dark" type="button" id ="X-button"  aria-label="Close"><i class="fa fa-times fa-2x" aria-hidden="true"></i>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>  
+
+
+      <main role="main">
+      <div id="loader">
+      </div>
       <div class="jumbotron">
 
-        <h3>User-Info:</h3>
-
-        <div id="user-info" class="mx-auto" style="width: 200px">
-          <img src="http://via.placeholder.com/200x200" id="avatar"/>
+      <div class="flex-sm-nowrap flex-wrap media">
+        <img id="avatar" class="mr-3" src="http://via.placeholder.com/200x200" alt="Generic placeholder image">
+        <div class="media-body">
+          <h3>User-Info:</h3>
+             
+          <ul class="list-unstyled list-group" >
+                <li class="list-group-item">Website: <a target="_blank" href="" id="website"></a></li>
+                <li class="list-group-item">Member since: <span id="created_at"></span></li>
+          </ul>
         </div>
-        <ul class="list-unstyled list-group" >
-          <li class="list-group-item">Website: <a target="_blank" href="" id="website"></a></li>
-          <li class="list-group-item">Member since: <span id="created_at"></span></li>
-        </ul>
+      </div>
         <button id="clearHistory" type="button" class="btn btn-danger float-right">Clear History</button>
         <hr class="my-5">
         <h3>Repos:</h3>
