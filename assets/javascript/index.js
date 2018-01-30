@@ -1,5 +1,5 @@
 /* eslint-disable */
-const debug = false
+const debug = true
 
 class ApiCall {
   constructor () {
