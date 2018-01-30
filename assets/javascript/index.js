@@ -1,4 +1,5 @@
 /* eslint-disable */
+const debug = true
 
 class ApiCall {
   constructor () {
@@ -6,14 +7,13 @@ class ApiCall {
     this.username = ""
   }
   getRepoList(username){
-    console.log("requested repo list for: " + username)
     var url = this.baseUrl
     return new Promise(function(resolve, reject) {
       $.getJSON(`${url}/${username}/repos`)
         .done((data) => {
           resolve(data);
           localStorage.setItem('reposlist', JSON.stringify(data));
-          console.log("repo list:", data)
+          if(debug){console.log("repo list:", data) }
         })
         .fail( () => {
           alert("Username not found");
@@ -21,19 +21,23 @@ class ApiCall {
     })
   }
   getProfileInfo(username){
-    console.log("requested user info for:" + username)
+    if(debug){console.log("requested user info for:", username) }
     const database = JSON.parse(localStorage.getItem('users')) || [];
     const users = database.filter(function (user) {
       return user.login == username;
     });
     if (users.length) {
-      return users[0];
+    return new Promise(function(resolve, reject) {
+      if(debug){console.log("user found in the Database:", users[0]) }
+      resolve(users[0]);
+    })
     } else{
-      fetch(`${this.baseUrl}/${username}`)
+      return fetch(`${this.baseUrl}/${username}`)
         .then(resp => resp.json())
         .then((data) => {
           var users = JSON.parse(localStorage.getItem('users')) || []
           users.push(data);
+          if(debug){console.log("user fetched over the API:", users[0]) }
           localStorage.setItem('users', JSON.stringify( users ));
           return data;
         })
@@ -42,10 +46,11 @@ class ApiCall {
   getSavedUsers(){
     if (localStorage.getItem('users') !== null) {
       // pass local storage to showSavedUsers in order to display them
+      if(debug){console.log("Found saved users") }
       instance_of_view.showSavedUsers(JSON.parse(localStorage.getItem('users')));
     } else {
       // throw error if no local storage was found
-      console.log("no storage found");
+      if(debug){console.log("no storage found") }
     }
   }
 }
@@ -66,9 +71,10 @@ class ViewLayer {
     this.profileInfoEventListener()
     this.onLoadListener()
     this.clearHistory()
+    if(debug){console.log("View instancenated") }
   }
   showRepoList(data){
-    console.log("repo list got updated")
+    if(debug){console.log("repo list got updated")}
     data.forEach(function(entry) {
       var element = document.createElement('li');
       element.classList.add('list-group-item')
@@ -80,6 +86,7 @@ class ViewLayer {
   showSavedUsers(userList = []){
     const list = document.querySelector(".saved_users");
     list.style.listStyle = "none";
+    if(debug){console.log("saved users shown", userList) }
     userList.forEach((user) => {
       const li = document.createElement("li");
       li.classList = "badge badge-pill badge-primary m-1 px-2 py-1";
@@ -99,6 +106,7 @@ class ViewLayer {
     var username = this.elements.username
 
     this.elements.repo.addEventListener("click", function(e){
+      if(debug){console.log("Repo button clicked") }
       e.preventDefault();
       InstanceOfAPiCall.getRepoList(username.value)
         .then(function(v) { // `delay` returns a promise
@@ -112,12 +120,19 @@ class ViewLayer {
     var show = this.render
     const username = this.elements.username
     this.elements.info.addEventListener("click", function(e){
+      if(debug){console.log("User button clicked") }
       e.preventDefault();
       //validation for the input value
       var letterNumber = /^[0-9a-zA-Z]+$/;
       if (letterNumber.test(username.value)){
-        show(InstanceOfAPiCall.getProfileInfo(username.value))
-      } else {
+        InstanceOfAPiCall.getProfileInfo(username.value)
+          .then((data) => {
+            if(debug){console.log("Input is valid, returning: ") }
+            show(data)
+          })
+      }
+      else {
+        if(debug){console.log("Input is not valid") }
         username.classList.add("is-invalid");
       }
     });
@@ -132,7 +147,7 @@ class ViewLayer {
   }
 
   render(data){
-    console.log("userprofile got updated")
+    if(debug){console.log("userprofile got updated")}
     instance_of_view.elements.image.src = data.avatar_url
     instance_of_view.elements.website.href = data.blog
     instance_of_view.elements.website.innerHTML = data.blog
