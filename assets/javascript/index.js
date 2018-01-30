@@ -142,18 +142,16 @@ class ViewLayer {
   }
 
   //clearStorage
-
   clearHistory() {
     this.elements.clearButton.addEventListener("click",  (e) => {
     let clearCashe = confirm("are you sure want to clear the cache");
     if ( clearCashe === true) {
-     localStorage.setItem('reposlist', JSON.stringify([]));
-      instance_of_view.elements["repo_list"].innerHTML = "";
+        localStorage.setItem('reposlist', JSON.stringify([]));
+        localStorage.setItem("users", JSON.stringify([]));
+        instance_of_view.elements["repo_list"].innerHTML = "";
        }
     });  
  }
-
- 
   render(data){
     if(debug){console.log("userprofile got updated")}
     instance_of_view.elements.image.src = data.avatar_url
